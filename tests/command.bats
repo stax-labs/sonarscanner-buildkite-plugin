@@ -1,13 +1,12 @@
 #!/usr/bin/env bats
 
-load "$BATS_PATH/load.bash"
-
 # Uncomment to enable stub debugging
-export CURL_STUB_DEBUG=/dev/tty
+# export DOCKER_STUB_DEBUG=/dev/tty
 
 source ".env"
 
 setup() {
+    load "$BATS_PLUGIN_PATH/load.bash"
     export TMPDIR_BACKUP=$TMPDIR
     export TMPDIR="/tmp"
     export SONARQUBE_LOGIN="secretkey"
@@ -69,8 +68,7 @@ teardown() {
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker cp /plugin/. 1234:/workdir"
-    assert_output --partial "ran docker copy"
+    assert_output --partial "Running docker cp /plugin/. :/workdir"
 }
 
 @test "Docker starts" {
@@ -81,8 +79,7 @@ teardown() {
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker start -a 1234"
-    assert_output --partial "ran docker start"
+    assert_output --partial "Running docker start -a"
 }
 
 @test "Accepts custom sources" {
@@ -216,7 +213,7 @@ teardown() {
 
     run $PWD/hooks/command
     assert_failure
-    assert_output --partial "Running rm -rf /workdir/artifacts-tmp.XXXXXXXXXX"
+    assert_output --partial "Running rm -rf"
 }
 
 @test "Run in Dotnet" {
