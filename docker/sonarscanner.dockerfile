@@ -1,6 +1,6 @@
 FROM centos:8
 
-ARG SONAR_SCANNER_VERSION=${SONAR_SCANNER_VERSION:-4.2.0.1873}
+ARG SONAR_SCANNER_VERSION=${SONAR_SCANNER_VERSION:-4.8.1.3023}
 ARG VERSION=${PLUGIN_VERSION}
 ARG DESCRIPTION="Run sonar-scanner in Docker"
 ARG VCS_URL="https://github.com/wayfair-incubator/sonarscanner-buildkite-plugin"
