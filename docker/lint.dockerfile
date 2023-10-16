@@ -3,7 +3,7 @@ FROM golang:1.21.3 AS gobuilder
 RUN go install github.com/shurcooL/markdownfmt@latest
 RUN go install github.com/mvdan/sh/cmd/shfmt@latest
 
-FROM amazoncorretto:11 AS amazoncorrettobuilder
+FROM amazoncorretto:21 AS amazoncorrettobuilder
 
 RUN yum update -y && \
   yum install -y \
@@ -17,7 +17,7 @@ RUN curl -o shellcheck.tar.xz \
   && tar xf shellcheck.tar.xz \
   && mv "shellcheck-${SCVERSION}/shellcheck" /usr/bin/
 
-FROM amazoncorretto:11
+FROM amazoncorretto:21
 
 RUN yum update -y && \
   yum install -y \
