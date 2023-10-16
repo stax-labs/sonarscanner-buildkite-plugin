@@ -12,7 +12,7 @@ services:
       context: .
       args:
         <<: *build_args
-        SONAR_SCANNER_VERSION: 4.2.0.1873
+        SONAR_SCANNER_VERSION: 4.8.1.3023
 
   sonarscanner-dotnet:
     image: sonarscannerbuildkite/sonarscanner-dotnet:${IMAGE_VERSION:-latest}
@@ -32,7 +32,7 @@ services:
       - ".:/app"
 
   plugin-test:
-    image: buildkite/plugin-tester
+    image: buildkite/plugin-tester:v3.0.1
     volumes:
       - ".:/plugin:ro"
 

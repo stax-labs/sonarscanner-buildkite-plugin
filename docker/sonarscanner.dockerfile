@@ -1,6 +1,6 @@
-FROM centos:8
+FROM amazoncorretto:11
 
-ARG SONAR_SCANNER_VERSION=${SONAR_SCANNER_VERSION:-4.2.0.1873}
+ARG SONAR_SCANNER_VERSION=${SONAR_SCANNER_VERSION:-4.8.1.3023}
 ARG VERSION=${PLUGIN_VERSION}
 ARG DESCRIPTION="Run sonar-scanner in Docker"
 ARG VCS_URL="https://github.com/wayfair-incubator/sonarscanner-buildkite-plugin"
@@ -8,14 +8,13 @@ ARG VCS_URL="https://github.com/wayfair-incubator/sonarscanner-buildkite-plugin"
 USER root
 
 RUN yum update -y && \
-    yum install -y \
-    curl \
-    java-11-openjdk \
-    nodejs \
-    unzip \
-    which && \
-    yum clean all && \
-    rm -rf /var/cache/yum
+  yum install -y \
+  shadow-utils \
+  curl \
+  nodejs \
+  unzip \
+  yum clean all && \
+  rm -rf /var/cache/yum
 
 RUN curl -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}.zip && \
     unzip sonarscanner.zip && \
