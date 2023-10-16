@@ -3,12 +3,13 @@ FROM golang:1.21.3 AS gobuilder
 RUN go install github.com/shurcooL/markdownfmt@latest
 RUN go install github.com/mvdan/sh/cmd/shfmt@latest
 
-FROM amazoncorretto:21 AS amazoncorrettobuilder
+FROM openjdk:22-jdk-slim AS javabuilder
 
-RUN yum update -y && \
-  yum install -y \
+RUN apt-get update -y && \
+  apt-get install -y \
   tar \
-  xz
+  curl \
+  xz-utils
 
 ARG SCVERSION="stable"
 
@@ -17,13 +18,9 @@ RUN curl -o shellcheck.tar.xz \
   && tar xf shellcheck.tar.xz \
   && mv "shellcheck-${SCVERSION}/shellcheck" /usr/bin/
 
-FROM amazoncorretto:21
+FROM openjdk:22-jdk-slim
 
-RUN yum update -y && \
-  yum install -y \
-  shadow-utils
-
-COPY --from=amazoncorrettobuilder /usr/bin/shellcheck /usr/bin/
+COPY --from=javabuilder /usr/bin/shellcheck /usr/bin/
 COPY --from=gobuilder /go/bin/* /usr/bin/
 COPY docker/entrypoints/run_formatters.sh /usr/bin/run_formatters
 
