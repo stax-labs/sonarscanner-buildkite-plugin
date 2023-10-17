@@ -6,7 +6,7 @@ x-build-args: &build_args
 
 services:
   sonarscanner:
-    image: sonarscannerbuildkite/sonarscanner:${IMAGE_VERSION:-latest}
+    image: ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${IMAGE_VERSION:-latest}
     build:
       dockerfile: docker/sonarscanner.dockerfile
       context: .

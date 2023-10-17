@@ -27,7 +27,7 @@ teardown() {
 @test "Logs start of run" {
 
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
@@ -39,7 +39,7 @@ teardown() {
 @test "Run in custom workdir" {
     export BUILDKITE_PLUGIN_SONARSCANNER_WORKDIR="/foo"
     stub docker \
-    "create --workdir /foo sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
+    "create --workdir /foo ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
@@ -51,18 +51,18 @@ teardown() {
 
 @test "Securely logs docker create" {
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=**********"
+    assert_output --partial "Running docker create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=**********"
 }
 
 @test "Docker copies local files into container" {
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey : echo 1234"  \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey : echo 1234"  \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
@@ -73,7 +73,7 @@ teardown() {
 
 @test "Docker starts" {
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
@@ -86,13 +86,13 @@ teardown() {
     export BUILDKITE_PLUGIN_SONARSCANNER_SOURCES="/source1,source2"
 
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=/source1,source2 -Dsonar.login=secretkey : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=/source1,source2 -Dsonar.login=secretkey : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=/source1,source2 -Dsonar.projectKey=my_project -Dsonar.login=**********"
+    assert_output --partial "Running docker create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=/source1,source2 -Dsonar.projectKey=my_project -Dsonar.login=**********"
 
     unset BUILDKITE_PLUGIN_SONARSCANNER_SOURCES
 }
@@ -101,13 +101,13 @@ teardown() {
     export BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS="-X"
 
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -X -Dsonar.login=********** :  echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -X -Dsonar.login=********** :  echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=********** -Dsonar.host.url=https://sonarqube.example.com -X"
+    assert_output --partial "Running docker create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=********** -Dsonar.host.url=https://sonarqube.example.com -X"
 
     unset BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS
 }
@@ -116,13 +116,13 @@ teardown() {
     export BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS_0="-X"
     export BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS_1="-Dsonar.test=foo"
     stub docker \
-    "docker create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -X -Dsonar.test=foo : echo 1234" \
+    "docker create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -X -Dsonar.test=foo : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
     run $PWD/hooks/command
     assert_success
-    assert_output --partial "Running docker create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=********** -Dsonar.host.url=https://sonarqube.example.com -X -Dsonar.test=foo"
+    assert_output --partial "Running docker create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=********** -Dsonar.host.url=https://sonarqube.example.com -X -Dsonar.test=foo"
 
     unset BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS_0
     unset BUILDKITE_PLUGIN_SONARSCANNER_ADDITIONAL_FLAGS_1
@@ -133,7 +133,7 @@ teardown() {
     export BUILDKITE_PLUGIN_SONARSCANNER_ARTIFACTS="tmp/*coverage-*.xml"
 
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -Dsonar.host.url=https://sonarqube.example.com -Dsonar.python.coverage.reportPaths=tmp/*coverage-*.xml : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -Dsonar.host.url=https://sonarqube.example.com -Dsonar.python.coverage.reportPaths=tmp/*coverage-*.xml : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "cp /workdir/artifacts-tmp.XXXXXXXXXX/. 1234:/workdir : echo ran docker artifact copy" \
     "start -a 1234 : echo ran docker start"
@@ -160,7 +160,7 @@ teardown() {
     export BUILDKITE_PLUGIN_SONARSCANNER_ARTIFACTS_1="tmp/*coverage-*.html"
 
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -Dsonar.host.url=https://sonarqube.example.com -Dsonar.python.coverage.reportPaths=tmp/*coverage-*.xml : echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.sources=. -Dsonar.projectKey=my_project -Dsonar.login=secretkey -Dsonar.host.url=https://sonarqube.example.com -Dsonar.python.coverage.reportPaths=tmp/*coverage-*.xml : echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "cp /workdir/artifacts-tmp.XXXXXXXXXX/. 1234:/workdir : echo ran docker artifact copy" \
     "start -a 1234 : echo ran docker start"
@@ -236,7 +236,7 @@ teardown() {
 @test "Using custom sonarqube_host" {
     export BUILDKITE_PLUGIN_SONARSCANNER_SONARQUBE_HOST="http://some_sonarqube_host"
     stub docker \
-    "create --workdir /workdir sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey -Dsonar.host.url=http://some_sonarqube_host: echo 1234" \
+    "create --workdir /workdir ghcr.io/stax-labs/sonarscannerbuildkite/sonarscanner:${PLUGIN_VERSION} -Dsonar.projectKey=my_project -Dsonar.sources=. -Dsonar.login=secretkey -Dsonar.host.url=http://some_sonarqube_host: echo 1234" \
     "cp /plugin/. 1234:/workdir : echo ran docker copy" \
     "start -a 1234 : echo ran docker start"
 
